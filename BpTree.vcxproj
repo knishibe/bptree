@@ -141,6 +141,7 @@
     <ClCompile Include="BpTree.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="TestExamples.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BpTree.h" />

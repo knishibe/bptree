@@ -9,23 +9,24 @@ BpTree::BpTree(unsigned nodeSize) {
 
 }
 
+BpTree::BpTree(BpTree* tree) {
+
+	root = tree->getRoot();
+	height = tree->getHeight();
+
+}
+
 BpTree::~BpTree() {
-	//vector<Node*> tempVector;
-	//Node* tempNode;
-	//for (int i = 0; i < height; i++) {
-	//	tempVector = (root->getLeftMostNode(height - 1))->getRow();
-	//	for (int i = 0; i < tempVector.size(); i++) {
-	//		tempNode = tempVector.back();
-	//		tempVector.pop_back();
-	//		delete tempNode;
-	//	}
-	//}
 	delete root;
 }
 
-void BpTree::GetRowTest() {
-	vector<Node*> test;
-	test = (root->getLeftMostNode(height - 1))->getRow();
+bool BpTree::operator==(BpTree* tree) {
+	if (this->getHeight() == tree->getHeight() &&
+		*(this->getRoot()) == *(tree->getRoot())) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool BpTree::insert(int key, string value) {
@@ -76,3 +77,11 @@ string BpTree::find(int key) {
 	Node* node = root->find(key);
 	return node->getValue(key);
 } 
+
+int BpTree::getHeight() {
+	return height;
+}
+
+Node* BpTree::getRoot() {
+	return root;
+}

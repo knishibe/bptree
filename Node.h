@@ -6,11 +6,6 @@
 
 using namespace std;
 
-//struct AdjacentNodes {
-//	Node* leftNode;
-//	Node* rightNode;
-//};
-
 class Node {
 
 	private:
@@ -33,14 +28,16 @@ class Node {
 
 	public:
 
-		// constructor
+		// constructors
 		Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf);
+		Node(Node* node);
 
 		// destructor
 		~Node();
 
 		// overloaded operators
-		bool operator==(Node* node);
+		bool operator==(Node node);
+		void operator=(Node* node);
 
 		// main functions
 		Node* insert(int key, Node* pointer);

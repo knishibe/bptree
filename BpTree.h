@@ -15,14 +15,26 @@ class BpTree {
 	
 	public:
 
+		// constructors
 		BpTree(unsigned nodeSize);
+		BpTree(BpTree* tree);
+
+		// destructor
 		~BpTree();
+
+		// overloaded operators
+		bool operator==(BpTree* tree);
+
+		// main functions
 		bool insert(int key, string value);
 		bool remove(int key);
 		void printKeys(); 
 		void printValues();
 		string find(int key);
-		void GetRowTest();
+
+		// getters
+		int getHeight();
+		Node* getRoot();
 
 
 };
