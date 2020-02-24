@@ -15,7 +15,7 @@ int main() {
 	int key;
 	string value;
 	char action;
-	BpTree* tree = new BpTree(2);
+	BpTree* tree = new BpTree(3);
 
 	while (continueLoop != 'n') {
 		cout << "Would you like to find (f), insert (i), or remove (r) a value from the tree?\n";

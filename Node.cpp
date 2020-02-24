@@ -2,7 +2,7 @@
 
 using namespace std;
 
-/* --------------------------- Node Implementation --------------------------- */
+/*---------------------- Constructor ----------------------*/
 Node::Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf) {
 	this->nodeSize = nodeSize;
 	this->parent = parent;
@@ -11,12 +11,14 @@ Node::Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf) {
 	this->adjacentNodes.rightNode = right;
 }
 
+/*---------------------- Destructor ----------------------*/
 Node::~Node() {
 	for (unsigned i = 0; i < (int)pointers.size(); i++) {
 		delete pointers[i];
 	}
 }
 
+/*---------------------- Overloaded Operators ----------------------*/
 bool Node::operator==(Node* node) {
 	if (this->parent == node->getParent() &&
 		this->isLeafNode == node->getIsLeafNode() &&
@@ -31,12 +33,19 @@ bool Node::operator==(Node* node) {
 	}
 }
 
+
+/*---------------------- Main Functions ----------------------*/
+
 Node* Node::remove(int key) {
+
 	bool removed = false;
 	for (unsigned i = 0; i < elements.size() && i < nodeSize; i++) {
-		if (key < elements[i]) {
+		if (key == elements[i]) {
 			elements.erase(elements.begin() + i);
 			values.erase(values.begin() + i);
+			if (i == 0 && elements.size() > 0) {
+				parent->swapKey(key, elements[0]);
+			}
 			removed = true;
 			break;
 		}
@@ -50,22 +59,24 @@ Node* Node::remove(int key) {
 
 	if (elements.size() < nodeSize / 2) {
 		vector<int> keys;
-		if (adjacentNodes.leftNode->getParent() == parent && adjacentNodes.leftNode->checkNodeSize()) {
+		if (adjacentNodes.leftNode != NULL && adjacentNodes.leftNode->getParent() == parent && 
+			adjacentNodes.leftNode->checkNodeSize()) {
 
 			// redistribute from left sibling
 			keys = adjacentNodes.leftNode->getElements();
 			this->insert(keys[keys.size() - 1], adjacentNodes.leftNode->getValue(keys[keys.size() - 1]));
-			parent->swapFirstKey(keys[keys.size() - 1]);
+			parent->swapKey(key, keys[keys.size() - 1]);
 			adjacentNodes.leftNode->remove(keys[keys.size() - 1]);
 
-		} else if (adjacentNodes.rightNode->getParent() == parent && adjacentNodes.rightNode->checkNodeSize()) {
+		} else if (adjacentNodes.rightNode != NULL &&adjacentNodes.rightNode->getParent() == parent && 
+			adjacentNodes.rightNode->checkNodeSize()) {
 
 			// redistribute from right sibling
 			keys = adjacentNodes.rightNode->getElements();
-			this->insert(keys[0], adjacentNodes.leftNode->getValue(keys[0]));
-			adjacentNodes.leftNode->remove(keys[0]);
+			this->insert(keys[0], adjacentNodes.rightNode->getValue(keys[0]));
+			adjacentNodes.rightNode->remove(keys[0]);
 			keys = adjacentNodes.rightNode->getElements();
-			parent->swapFirstKey(keys[0]);
+			parent->swapKey(key, keys[0]);
 
 		} else {
 
@@ -164,6 +175,11 @@ Node* Node::insert(int key, string value) {
 			newNode->insert(elements[i], values[i]);
 		}
 
+		if (adjacentNodes.rightNode != NULL) {
+			AdjacentNodes newNodes = adjacentNodes.rightNode->getAdjacentNodes();
+			newNodes.leftNode = newNode;
+			adjacentNodes.rightNode->setAdjacentNodes(newNodes);
+		}
 		adjacentNodes.rightNode = newNode;
 
 		elements.erase(elements.begin() + half, elements.end());
@@ -260,17 +276,13 @@ vector<Node*> Node::getRow() {
 	}
 }
 
-void Node::setParent(Node* node) {
-	parent = node;
-}
-
-Node* Node::getParent() {
-	return parent;
-}
-
-void Node::swapFirstKey(int newKey) {
-	elements.erase(elements.begin());
-	elements.insert(elements.begin(), newKey);
+void Node::swapKey(int oldKey, int newKey) {
+	for (unsigned i = 0; i < elements.size(); i++) {
+		if (elements[i] == oldKey) {
+			elements.erase(elements.begin() + i);
+			elements.insert(elements.begin() + i, newKey);
+		}
+	}
 }
 
 bool Node::checkNodeSize() {
@@ -279,6 +291,12 @@ bool Node::checkNodeSize() {
 	} else {
 		return false;
 	}
+}
+
+/*---------------------- Getters ----------------------*/
+
+Node* Node::getParent() {
+	return parent;
 }
 
 bool Node::getIsLeafNode() {
@@ -303,6 +321,13 @@ vector<string> Node::getValues() {
 
 Node::AdjacentNodes Node::getAdjacentNodes() {
 	return adjacentNodes;
+}
+
+
+/*---------------------- Setters ----------------------*/
+
+void Node::setParent(Node* node) {
+	parent = node;
 }
 
 void Node::setIsLeafNode(bool isLeafNode) {

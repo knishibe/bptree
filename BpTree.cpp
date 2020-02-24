@@ -47,6 +47,7 @@ bool BpTree::remove(int key) {
 	if (node->getValue(key) == "") {
 		return false;
 	} else {
+		node->remove(key);
 		return true;
 	}
 }

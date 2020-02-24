@@ -31,9 +31,16 @@ class Node {
 
 	public:
 
+		// constructor
 		Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf);
+
+		// destructor
 		~Node();
+
+		// overloaded operators
 		bool operator==(Node* node);
+
+		// main functions
 		Node* insert(int key, Node* pointer);
 		Node* insert(int key, string value);
 		void insert(int key, Node* left, Node* right); // for special case: new internal node
@@ -41,14 +48,15 @@ class Node {
 		Node* find(int key);
 		void printKeys();
 		void printValues();
-		void swapFirstKey(int newKey);
+
+		// helper functions
+		void swapKey(int oldKey, int newKey);
 		Node* getLeftMostNode(int level);
-		void setParent(Node* node);
-		Node* getParent();
 		vector<Node*> getRow();
 		bool checkNodeSize();
 
 		// getters
+		Node* getParent();
 		bool getIsLeafNode();
 		unsigned getNodeSize();
 		vector<int> getElements();
@@ -58,6 +66,7 @@ class Node {
 		AdjacentNodes getAdjacentNodes();
 
 		// setters
+		void setParent(Node* node);
 		void setIsLeafNode(bool isLeafNode);
 		void setNodeSize(unsigned nodeSize);
 		void setElements(vector<int> elements);
