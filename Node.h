@@ -45,6 +45,7 @@ class Node {
 		Node* insert(int key, string value);
 		void insert(int key, Node* left, Node* right); // for special case: new internal node
 		Node* remove(int key);
+		Node* remove(Node* pointer);
 		Node* find(int key);
 		void printKeys();
 		void printValues();
