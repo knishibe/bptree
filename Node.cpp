@@ -39,12 +39,15 @@ bool Node::operator==(Node* node) {
 Node* Node::remove(int key) {
 
 	bool removed = false;
+	int swappedKey = key;
+
 	for (unsigned i = 0; i < elements.size() && i < nodeSize; i++) {
 		if (key == elements[i]) {
 			elements.erase(elements.begin() + i);
 			values.erase(values.begin() + i);
 			if (i == 0 && elements.size() > 0) {
 				parent->swapKey(key, elements[0]);
+				swappedKey = elements[0];
 			}
 			removed = true;
 			break;
@@ -57,7 +60,7 @@ Node* Node::remove(int key) {
 		removed = true;
 	}
 
-	if (elements.size() < nodeSize / 2) {
+	if (elements.size() < nodeSize / 2 + nodeSize % 2) {
 		vector<int> keys;
 		if (adjacentNodes.leftNode != NULL && adjacentNodes.leftNode->getParent() == parent && 
 			adjacentNodes.leftNode->checkNodeSize()) {
@@ -65,7 +68,7 @@ Node* Node::remove(int key) {
 			// redistribute from left sibling
 			keys = adjacentNodes.leftNode->getElements();
 			this->insert(keys[keys.size() - 1], adjacentNodes.leftNode->getValue(keys[keys.size() - 1]));
-			parent->swapKey(key, keys[keys.size() - 1]);
+			parent->swapKey(swappedKey, keys[keys.size() - 1]);
 			adjacentNodes.leftNode->remove(keys[keys.size() - 1]);
 
 		} else if (adjacentNodes.rightNode != NULL &&adjacentNodes.rightNode->getParent() == parent && 
@@ -76,7 +79,7 @@ Node* Node::remove(int key) {
 			this->insert(keys[0], adjacentNodes.rightNode->getValue(keys[0]));
 			adjacentNodes.rightNode->remove(keys[0]);
 			keys = adjacentNodes.rightNode->getElements();
-			parent->swapKey(key, keys[0]);
+			parent->swapKey(swappedKey, keys[0]);
 
 		} else {
 
@@ -286,7 +289,9 @@ void Node::swapKey(int oldKey, int newKey) {
 }
 
 bool Node::checkNodeSize() {
-	if (elements.size() > nodeSize / 2) {
+	if (isLeafNode && elements.size() > nodeSize / 2 + nodeSize % 2) {
+		return true;
+	} else if (!isLeafNode && elements.size() > nodeSize / 2) {
 		return true;
 	} else {
 		return false;
