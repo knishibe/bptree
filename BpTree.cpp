@@ -47,7 +47,12 @@ bool BpTree::remove(int key) {
 	if (node->getValue(key) == "") {
 		return false;
 	} else {
-		node->remove(key);
+		Node* newRoot = node->remove(key);
+		if (newRoot != NULL) {
+			delete root;
+			root = newRoot;
+			height--;
+		}
 		return true;
 	}
 }

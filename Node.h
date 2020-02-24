@@ -28,6 +28,8 @@ class Node {
 		AdjacentNodes adjacentNodes;
 		vector<string> values;
 
+		void insertFront(int key, Node* pointer);
+
 
 	public:
 
@@ -52,7 +54,6 @@ class Node {
 
 		// helper functions
 		void removePointer(Node* pointer);
-		void insertFront(int key, Node* pointer);
 		void swapKey(int oldKey, int newKey);
 		Node* getLeftMostNode(int level);
 		vector<Node*> getRow();
