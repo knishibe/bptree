@@ -38,7 +38,6 @@ bool Node::operator==(Node* node) {
 
 Node* Node::remove(Node* pointer) {
 	bool removed = false;
-	Node* node;
 
 	if (pointer == pointers[0]) {
 		elements.erase(elements.begin());
@@ -49,8 +48,7 @@ Node* Node::remove(Node* pointer) {
 	for (unsigned i = 1; i < pointers.size() && i < nodeSize; i++) {
 		if (pointer == pointers[i]) {
 			elements.erase(elements.begin() + i - 1);
-			node = pointers[i];
-			delete node;
+			delete pointers[i];
 			pointers.erase(pointers.begin() + i);
 			removed = true;
 			break;
@@ -60,6 +58,7 @@ Node* Node::remove(Node* pointer) {
 	if (removed == false) {
 		elements.pop_back();
 		delete pointers[pointers.size() - 1];
+		pointers.pop_back();
 		removed = true;
 	}
 
@@ -72,11 +71,18 @@ Node* Node::remove(Node* pointer) {
 		if (adjacentNodes.leftNode != NULL && adjacentNodes.leftNode->getParent() == parent &&
 			adjacentNodes.leftNode->checkNodeSize()) {
 
-			//// redistribute from left sibling
-			//keys = adjacentNodes.leftNode->getElements();
-			//this->insert(keys[keys.size() - 1], adjacentNodes.leftNode->getPointer(keys[keys.size() - 1]));
-			//parent->swapKey(swappedKey, keys[keys.size() - 1]);
-			//adjacentNodes.leftNode->remove(keys[keys.size() - 1]);
+			// redistribute from left sibling
+			keys = parent->getElements();
+			pointers = adjacentNodes.leftNode->getPointers();
+			parentPointers = parent->getPointers();
+			elements = adjacentNodes.leftNode->getElements();
+			for (unsigned i = 0; i < parentPointers.size(); i++) {
+				if (adjacentNodes.leftNode == parentPointers[i]) {
+					this->insertFront(keys[i], pointers[pointers.size() - 1]);
+					parent->swapKey(keys[i], elements[elements.size() - 1]);
+				}
+			}
+			adjacentNodes.leftNode->removePointer(pointers[pointers.size() - 1]);
 
 		}
 		else if (adjacentNodes.rightNode != NULL && adjacentNodes.rightNode->getParent() == parent &&
@@ -93,60 +99,55 @@ Node* Node::remove(Node* pointer) {
 					parent->swapKey(keys[i - 1], elements[0]);
 				}
 			}
-			adjacentNodes.rightNode->remove(pointers[0]);
+			adjacentNodes.rightNode->removePointer(pointers[0]);
 
 		}
 		else if (adjacentNodes.leftNode != NULL && adjacentNodes.leftNode->getParent() == parent) {
 			// coalece into left sibling
-			for (unsigned i = 0; i < elements.size(); i++) {
-				adjacentNodes.leftNode->insert(elements[i], values[i]);
-			}
-			nodes = adjacentNodes.leftNode->getAdjacentNodes();
-			nodes.rightNode = adjacentNodes.rightNode;
-			adjacentNodes.leftNode->setAdjacentNodes(nodes);
-			if (adjacentNodes.rightNode != NULL) {
-				nodes = adjacentNodes.rightNode->getAdjacentNodes();
-				nodes.leftNode = adjacentNodes.leftNode;
-				adjacentNodes.rightNode->setAdjacentNodes(nodes);
-			}
-			parent->remove(this);
+			//for (unsigned i = 0; i < elements.size(); i++) {
+			//	adjacentNodes.leftNode->insert(elements[i], values[i]);
+			//}
+			//nodes = adjacentNodes.leftNode->getAdjacentNodes();
+			//nodes.rightNode = adjacentNodes.rightNode;
+			//adjacentNodes.leftNode->setAdjacentNodes(nodes);
+			//if (adjacentNodes.rightNode != NULL) {
+			//	nodes = adjacentNodes.rightNode->getAdjacentNodes();
+			//	nodes.leftNode = adjacentNodes.leftNode;
+			//	adjacentNodes.rightNode->setAdjacentNodes(nodes);
+			//}
+			//parent->remove(this);
 		}
 		else if (adjacentNodes.rightNode != NULL && adjacentNodes.rightNode->getParent() == parent) {
 			// coalece into right sibling
-			for (unsigned i = 0; i < elements.size(); i++) {
-				adjacentNodes.rightNode->insert(elements[i], values[i]);
-			}
-			nodes = adjacentNodes.rightNode->getAdjacentNodes();
-			nodes.leftNode = adjacentNodes.leftNode;
-			adjacentNodes.rightNode->setAdjacentNodes(nodes);
-			if (adjacentNodes.leftNode != NULL) {
-				nodes = adjacentNodes.leftNode->getAdjacentNodes();
-				nodes.rightNode = adjacentNodes.rightNode;
-				adjacentNodes.leftNode->setAdjacentNodes(nodes);
-			}
-			parent->remove(this);
+			//for (unsigned i = 0; i < elements.size(); i++) {
+			//	adjacentNodes.rightNode->insert(elements[i], values[i]);
+			//}
+			//nodes = adjacentNodes.rightNode->getAdjacentNodes();
+			//nodes.leftNode = adjacentNodes.leftNode;
+			//adjacentNodes.rightNode->setAdjacentNodes(nodes);
+			//if (adjacentNodes.leftNode != NULL) {
+			//	nodes = adjacentNodes.leftNode->getAdjacentNodes();
+			//	nodes.rightNode = adjacentNodes.rightNode;
+			//	adjacentNodes.leftNode->setAdjacentNodes(nodes);
+			//}
+			//parent->remove(this);
 		}
 		else if (parent == NULL && pointers.size() < 2) {
 			// special case: new root
 		}
 
-		return this;
+		return NULL;
 	}
 }
 
 Node* Node::remove(int key) {
 
 	bool removed = false;
-	int swappedKey = key;
 
 	for (unsigned i = 0; i < elements.size() && i < nodeSize; i++) {
 		if (key == elements[i]) {
 			elements.erase(elements.begin() + i);
 			values.erase(values.begin() + i);
-			if (i == 0 && elements.size() > 0) {
-				parent->swapKey(key, elements[0]);
-				swappedKey = elements[0];
-			}
 			removed = true;
 			break;
 		}
@@ -167,7 +168,7 @@ Node* Node::remove(int key) {
 			// redistribute from left sibling
 			keys = adjacentNodes.leftNode->getElements();
 			this->insert(keys[keys.size() - 1], adjacentNodes.leftNode->getValue(keys[keys.size() - 1]));
-			parent->swapKey(swappedKey, keys[keys.size() - 1]);
+			parent->swapKey(key, keys[keys.size() - 1]);
 			adjacentNodes.leftNode->remove(keys[keys.size() - 1]);
 
 		} else if (adjacentNodes.rightNode != NULL &&adjacentNodes.rightNode->getParent() == parent && 
@@ -178,7 +179,7 @@ Node* Node::remove(int key) {
 			this->insert(keys[0], adjacentNodes.rightNode->getValue(keys[0]));
 			adjacentNodes.rightNode->remove(keys[0]);
 			keys = adjacentNodes.rightNode->getElements();
-			parent->swapKey(swappedKey, keys[0]);
+			parent->swapKey(key, keys[0]);
 
 		} else if (adjacentNodes.leftNode != NULL && adjacentNodes.leftNode->getParent() == parent) {
 			// coalece into left sibling
@@ -193,7 +194,7 @@ Node* Node::remove(int key) {
 				nodes.leftNode = adjacentNodes.leftNode;
 				adjacentNodes.rightNode->setAdjacentNodes(nodes);
 			}
-			parent->remove(this);
+			return parent->remove(this);
 		}
 		else if (adjacentNodes.rightNode != NULL && adjacentNodes.rightNode->getParent() == parent) {
 			// coalece into right sibling
@@ -208,14 +209,41 @@ Node* Node::remove(int key) {
 				nodes.rightNode = adjacentNodes.rightNode;
 				adjacentNodes.leftNode->setAdjacentNodes(nodes);
 			}
-			parent->remove(this);
+			return parent->remove(this);
 		} else {
 			cerr << "Error: should not get here!\n";
 		}
 		
 	}
 
-	return this;
+	return NULL;
+}
+
+void Node::removePointer(Node* pointer) {
+
+	bool removed = false;
+
+	for (unsigned i = 1; i < pointers.size() && i < nodeSize; i++) {
+		if (pointer == pointers[i]) {
+			elements.erase(elements.begin() + i - 1);
+			pointers.erase(pointers.begin() + i);
+			removed = true;
+			break;
+		}
+	}
+
+	if (removed == false) {
+		elements.pop_back();
+		delete pointers[pointers.size() - 1];
+		removed = true;
+	}
+}
+
+void Node::insertFront(int key, Node* pointer) {
+
+	elements.insert(elements.begin(), key);
+	pointers.insert(pointers.begin(), pointer);
+
 }
 
 Node* Node::insert(int key, Node* pointer) {

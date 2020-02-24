@@ -1,3 +1,7 @@
-﻿  Node.cpp
-C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Node.cpp(135): warning C4715: 'Node::remove': not all control paths return a value
+﻿  BpTree.cpp
+  Node.cpp
+C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Node.cpp(70,17): warning C4101: 'nodes': unreferenced local variable
+  Test.cpp
+  Generating Code...
+C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Node.cpp(141): warning C4715: 'Node::remove': not all control paths return a value
   BpTree.vcxproj -> C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Debug\BpTree.exe

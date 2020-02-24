@@ -51,6 +51,8 @@ class Node {
 		void printValues();
 
 		// helper functions
+		void removePointer(Node* pointer);
+		void insertFront(int key, Node* pointer);
 		void swapKey(int oldKey, int newKey);
 		Node* getLeftMostNode(int level);
 		vector<Node*> getRow();
