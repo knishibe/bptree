@@ -60,7 +60,7 @@ Node* Node::remove(int key) {
 		removed = true;
 	}
 
-	if (elements.size() < nodeSize / 2 + nodeSize % 2) {
+	if (values.size() < (nodeSize + 1) / 2) {
 		vector<int> keys;
 		if (adjacentNodes.leftNode != NULL && adjacentNodes.leftNode->getParent() == parent && 
 			adjacentNodes.leftNode->checkNodeSize()) {
@@ -289,9 +289,9 @@ void Node::swapKey(int oldKey, int newKey) {
 }
 
 bool Node::checkNodeSize() {
-	if (isLeafNode && elements.size() > nodeSize / 2 + nodeSize % 2) {
+	if (isLeafNode && values.size() > (nodeSize + 1) / 2) {
 		return true;
-	} else if (!isLeafNode && elements.size() > nodeSize / 2) {
+	} else if (!isLeafNode && pointers.size() > (nodeSize + 1) / 2) {
 		return true;
 	} else {
 		return false;
