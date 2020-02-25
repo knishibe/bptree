@@ -26,7 +26,7 @@ class BpTree {
 		~BpTree();
 
 		// overloaded operators
-		bool operator==(BpTree* tree);
+		BpTree operator=(BpTree tree);
 
 		// main functions
 		bool insert(int key, string value);

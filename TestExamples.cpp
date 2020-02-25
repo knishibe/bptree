@@ -13,17 +13,14 @@ void testRemoveSlides(BpTree* tree);
 
 int main() {
 
-	BpTree* tree = new BpTree(3);
-	
+	BpTree* tree = new BpTree(3);	
 
 	testInsertSlides(tree);
-	cout << "\n\n";
 	testRemoveSlides(tree);
-	//BpTree* tree2 = new BpTree(tree);
-	cout << "\n";
-	//tree2->printKeys();
 
-	//cout << "\n\n\n" << (tree == tree2) << "\n\n\n";
+	BpTree* tree2 = new BpTree(tree);
+	tree2->printKeys();
+
 
 	return 0;
 }
@@ -56,10 +53,6 @@ void testInsertSlides(BpTree* tree) {
 	tree->insert(26, "26");
 	tree->insert(22, "22");
 
-
-
-
-
 	cout << "Tree after insert:\n";
 	tree->printKeys();
 
@@ -72,9 +65,6 @@ void testRemoveSlides(BpTree* tree) {
 	tree->remove(6);
 	tree->remove(8);
 	tree->remove(23);
-
-	tree->printKeys();
-	cout << "\n\n";
 	tree->remove(31);
 	tree->remove(27);
 

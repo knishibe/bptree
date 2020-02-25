@@ -37,7 +37,7 @@ class Node {
 
 		// overloaded operators
 		bool operator==(Node node);
-	/*	void operator=(Node node);*/
+		void operator=(Node node);
 
 		// main functions
 		Node* insert(int key, Node* pointer);

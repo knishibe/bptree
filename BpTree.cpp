@@ -12,7 +12,7 @@ BpTree::BpTree(unsigned nodeSize) {
 BpTree::BpTree(BpTree* tree) {
 
 	root = new Node(tree->getRoot(), NULL);
-	fixAdjacentNodePointers(root);
+	//fixAdjacentNodePointers(root);
 	height = tree->getHeight();
 
 }
@@ -21,13 +21,10 @@ BpTree::~BpTree() {
 	delete root;
 }
 
-bool BpTree::operator==(BpTree* tree) {
-	if (this->getHeight() == tree->getHeight() &&
-		*(this->getRoot()) == *(tree->getRoot())) {
-		return true;
-	} else {
-		return false;
-	}
+BpTree BpTree::operator=(BpTree tree) {
+	BpTree* newTree = new BpTree(tree);
+	delete this;
+	return newTree;
 }
 
 bool BpTree::insert(int key, string value) {
