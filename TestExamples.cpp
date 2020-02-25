@@ -76,6 +76,7 @@ void testRemoveSlides(BpTree* tree) {
 	tree->printKeys();
 	cout << "\n\n";
 	tree->remove(31);
+	tree->remove(27);
 
 	cout << "Tree after remove:\n";
 	tree->printKeys();

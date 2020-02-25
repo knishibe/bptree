@@ -328,9 +328,7 @@ Node* Node::remove(int key) {
 				adjacentNodes.leftNode->setAdjacentNodes(nodes);
 			}
 			return parent->remove(this);
-		} else {
-			cerr << "Error: should not get here!\n";
-		}
+		} 
 		
 	}
 
