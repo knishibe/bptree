@@ -12,6 +12,7 @@ BpTree::BpTree(unsigned nodeSize) {
 BpTree::BpTree(BpTree* tree) {
 
 	root = new Node(tree->getRoot(), NULL);
+	fixAdjacentNodePointers(root);
 	height = tree->getHeight();
 
 }
@@ -84,4 +85,8 @@ int BpTree::getHeight() {
 
 Node* BpTree::getRoot() {
 	return root;
+}
+
+void BpTree::fixAdjacentNodePointers(Node* root) {
+	root->fixAdjacentNodePointers(root);
 }

@@ -28,42 +28,48 @@ Node::Node(Node* node, Node* parent) {
 			pointers.push_back(new Node(nodePointers[i], this));
 		}
 
-			if (pointers.size() > 1) {
-				if (adjacentNodes.leftNode != NULL) {
-					nodePointers = adjacentNodes.leftNode->getPointers();
-					if (nodePointers.size() > 0) {
-						nodes.leftNode = nodePointers.back();
-					}
-				} else {
-					nodes.leftNode = NULL;
-				} 
-				nodes.rightNode = pointers[1];
-				pointers[0]->setAdjacentNodes(nodes);
+		if (pointers.size() > 1) {
+			if (adjacentNodes.leftNode != NULL) {
+				nodePointers = adjacentNodes.leftNode->getPointers();
+				if (nodePointers.size() > 0) {
+					nodes.leftNode = nodePointers.back();
+				}
+			} else {
+				nodes.leftNode = NULL;
+			} 
+			nodes.rightNode = pointers[1];
+			pointers[0]->setAdjacentNodes(nodes);
+		}
+
+		if (pointers.size() > 2) {
+
+			for (unsigned i = 1; i < pointers.size() - 1; i++) {
+				nodes.leftNode = pointers[i - 1];
+				nodes.rightNode = pointers[i + 1];
+				pointers[i]->setAdjacentNodes(nodes);
 			}
+		}
 
-			if (pointers.size() > 2) {
-
-				for (unsigned i = 1; i < pointers.size() - 1; i++) {
-					nodes.leftNode = pointers[i - 1];
-					nodes.rightNode = pointers[i + 1];
-					pointers[i]->setAdjacentNodes(nodes);
+		if (pointers.size() > 1) {
+			nodes.leftNode = pointers[pointers.size() - 1];
+			if (adjacentNodes.rightNode != NULL) {
+				nodePointers = adjacentNodes.rightNode->getPointers();
+				if (nodePointers.size() > 0) {
+					nodes.rightNode = nodePointers.back();
 				}
 			}
-
-			if (pointers.size() > 1) {
-				nodes.leftNode = pointers[pointers.size() - 1];
-				if (adjacentNodes.rightNode != NULL) {
-					nodePointers = adjacentNodes.rightNode->getPointers();
-					if (nodePointers.size() > 0) {
-						nodes.rightNode = nodePointers.back();
-					}
-				}
-				else {
-					nodes.rightNode = NULL;
-				}
-				pointers[pointers.size() - 1]->setAdjacentNodes(nodes);
+			else {
+				nodes.rightNode = NULL;
 			}
-		
+			pointers[pointers.size() - 1]->setAdjacentNodes(nodes);
+		}
+
+		//if (parent != NULL) {
+		//	nodePointers = parent->getPointers();
+		//	for (unsigned i = 0; i < nodePointers.size(); i++) {
+		//		if()
+		//	}
+		//}
 	}
 
 }
@@ -196,10 +202,12 @@ Node* Node::remove(Node* pointer) {
 			for (unsigned i = 0; i < parentPointers.size(); i++) {
 				if (adjacentNodes.leftNode == parentPointers[i]) {
 					adjacentNodes.leftNode->insert(tempElements[i], pointers[0]);
+					pointers[0]->setParent(adjacentNodes.leftNode);
 				}
 			}
 			for (unsigned i = 0; i < elements.size(); i++) {
 				adjacentNodes.leftNode->insert(elements[i], pointers[i + 1]);
+				pointers[i + 1]->setParent(adjacentNodes.leftNode);
 			}
 			nodes = adjacentNodes.leftNode->getAdjacentNodes();
 			nodes.rightNode = adjacentNodes.rightNode;
@@ -210,7 +218,7 @@ Node* Node::remove(Node* pointer) {
 				adjacentNodes.rightNode->setAdjacentNodes(nodes);
 			}
 			pointers.erase(pointers.begin(), pointers.end());
-			parent->remove(this);
+			return parent->remove(this);
 		}
 		else if (adjacentNodes.rightNode != NULL && adjacentNodes.rightNode->getParent() == parent) {
 			// coalece into right sibling
@@ -219,12 +227,14 @@ Node* Node::remove(Node* pointer) {
 			tempElements = parent->getElements();
 			for (unsigned i = 1; i < parentPointers.size(); i++) {
 				if (adjacentNodes.rightNode == parentPointers[i]) {
-					adjacentNodes.rightNode->insert(tempElements[i - 1], pointers[pointers.size() - 1]);
+					adjacentNodes.rightNode->insertFront(tempElements[i - 1], pointers[pointers.size() - 1]);
+					pointers[pointers.size() - 1]->setParent(adjacentNodes.rightNode);
 				}
 			}
 
 			for (unsigned i = 0; i < elements.size(); i++) {
 				adjacentNodes.rightNode->insert(elements[i], pointers[i]);
+				pointers[i]->setParent(adjacentNodes.rightNode);
 			}
 
 			nodes = adjacentNodes.rightNode->getAdjacentNodes();
@@ -236,7 +246,7 @@ Node* Node::remove(Node* pointer) {
 				adjacentNodes.leftNode->setAdjacentNodes(nodes);
 			}
 			pointers.erase(pointers.begin(), pointers.end());
-			parent->remove(this);
+			return parent->remove(this);
 		}
 	} else if (parent == NULL && pointers.size() < 2) {
 		// special case: new root
@@ -568,6 +578,24 @@ bool Node::checkNodeSize() {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+void Node::fixAdjacentNodePointers(Node* node) {
+	vector<Node*> nodePointers = node->getPointers();
+	AdjacentNodes adjacentNodePointers;
+	//for (unsigned i = 0; i < nodePointers.size() - 1; i++) {
+	//	adjacentNodePointers = nodePointers[i]->getAdjacentNodes();
+	//	adjacentNodePointers.rightNode = nodePointers[i + 1];
+	//	nodePointers[i]->setAdjacentNodes(adjacentNodePointers);
+
+	//	adjacentNodePointers = nodePointers[i + 1]->getAdjacentNodes();
+	//	adjacentNodePointers.leftNode = nodePointers[i];
+	//	nodePointers[i + 1]->setAdjacentNodes(adjacentNodePointers);
+	//}
+
+	if (parent != NULL) {
+
 	}
 }
 

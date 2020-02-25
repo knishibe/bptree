@@ -55,6 +55,7 @@ class Node {
 		Node* getLeftMostNode(int level);
 		vector<Node*> getRow();
 		bool checkNodeSize();
+		void fixAdjacentNodePointers(Node* node);
 
 		// getters
 		Node* getParent();
