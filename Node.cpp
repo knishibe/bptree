@@ -28,56 +28,48 @@ Node::Node(Node* node, Node* parent) {
 		for (unsigned i = 0; i < nodePointers.size(); i++) {
 			pointers.push_back(new Node(nodePointers[i], this));
 		}
-
-		if (parent != NULL) {
-			parentPointers = parent->getPointers();
-			for (unsigned i = 1; i < parentPointers.size() - 1; i++) {
-				if (this == parentPointers[i]) {
-					this->adjacentNodes.rightNode = parentPointers[i + 1];
-					this->adjacentNodes.leftNode = parentPointers[i - 1];
-				}
-			}
-		}
-
-		/*if (pointers.size() > 1) {
-			if (adjacentNodes.leftNode != NULL) {
-				nodePointers = adjacentNodes.leftNode->getPointers();
-				if (nodePointers.size() > 0) {
-					nodes.leftNode = nodePointers.back();
-				}
-			}
-			else {
-				nodes.leftNode = NULL;
-			}
-			nodes.rightNode = pointers[1];
-			pointers[0]->setAdjacentNodes(nodes);
-		}
-
-		if (pointers.size() > 2) {
-
-			for (unsigned i = 1; i < pointers.size() - 1; i++) {
-				nodes.leftNode = pointers[i - 1];
-				nodes.rightNode = pointers[i + 1];
-				pointers[i]->setAdjacentNodes(nodes);
-			}
-		}
-
-		if (pointers.size() > 1) {
-			nodes.leftNode = pointers[pointers.size() - 1];
-			if (adjacentNodes.rightNode != NULL) {
-				nodePointers = adjacentNodes.rightNode->getPointers();
-				if (nodePointers.size() > 0) {
-					nodes.rightNode = nodePointers.back();
-				}
-			}
-			else {
-				nodes.rightNode = NULL;
-			}
-			pointers[pointers.size() - 1]->setAdjacentNodes(nodes);
-		}*/
-
 	}
 
+}
+
+void Node::adjacentNodesFix() {
+	vector<Node*> parentPointers;
+	if (parent != NULL) {
+		parentPointers = parent->getPointers();
+		if (parentPointers.size() > 0 && this == parentPointers[0]) {
+			this->adjacentNodes.rightNode = parentPointers[1];
+			this->adjacentNodes.leftNode = NULL;
+		}
+		for (unsigned i = 1; i < parentPointers.size() - 1; i++) {
+			if (this == parentPointers[i]) {
+				this->adjacentNodes.rightNode = parentPointers[i + 1];
+				this->adjacentNodes.leftNode = parentPointers[i - 1];
+			}
+		}
+		if (parentPointers.size() > 1 && this == parentPointers[parentPointers.size() - 1]) {
+			this->adjacentNodes.rightNode = NULL;
+			this->adjacentNodes.leftNode = parentPointers[parentPointers.size() - 2];
+		}
+	}
+	for (unsigned i = 0; i < pointers.size(); i++) {
+		pointers[i]->adjacentNodesFix();
+	}
+
+	if (adjacentNodes.rightNode == NULL) {
+		adjacentNodes.rightNode = fixEndNode(0);
+	}
+}
+
+Node* Node::fixEndNode(int level) {
+	if ((parent != NULL) && (adjacentNodes.rightNode == NULL)) {
+		if (parent->adjacentNodes.rightNode != NULL) {
+			return parent->adjacentNodes.rightNode->getLeftMostNode(level + 1);
+		} else {
+			return parent->fixEndNode(level + 1);
+		}
+	} else {
+		return NULL;
+	}
 }
 
 /*---------------------- Destructor ----------------------*/
@@ -352,6 +344,7 @@ Node* Node::insert(int key, Node* pointer) {
 	}
 
 	if (elements.size() > nodeSize) {
+		// split node
 		Node* newNode = new Node(nodeSize, parent, this, adjacentNodes.rightNode, false);
 		int half = nodeSize / 2 + 1;
 		int halfVal = elements[half];
@@ -417,6 +410,7 @@ Node* Node::insert(int key, string value) {
 	}
 
 	if (elements.size() > nodeSize) {
+		// split node
 		Node* newNode = new Node(nodeSize, parent, this, adjacentNodes.rightNode, true);
 		int half = nodeSize / 2 + 1;
 		int halfVal = elements[half];
@@ -509,6 +503,15 @@ Node* Node::getLeftMostNode(int level) {
 	}
 }
 
+Node* Node::getLeftMostNode() {
+	if (isLeafNode) {
+		return this;
+	}
+	else {
+		return pointers[0]->getLeftMostNode();
+	}
+}
+
 vector<Node*> Node::getRow() {
 
 	vector<Node*> row;
@@ -541,24 +544,6 @@ bool Node::checkNodeSize() {
 		return true;
 	} else {
 		return false;
-	}
-}
-
-void Node::fixAdjacentNodePointers(Node* node) {
-	vector<Node*> nodePointers = node->getPointers();
-	AdjacentNodes adjacentNodePointers;
-	//for (unsigned i = 0; i < nodePointers.size() - 1; i++) {
-	//	adjacentNodePointers = nodePointers[i]->getAdjacentNodes();
-	//	adjacentNodePointers.rightNode = nodePointers[i + 1];
-	//	nodePointers[i]->setAdjacentNodes(adjacentNodePointers);
-
-	//	adjacentNodePointers = nodePointers[i + 1]->getAdjacentNodes();
-	//	adjacentNodePointers.leftNode = nodePointers[i];
-	//	nodePointers[i + 1]->setAdjacentNodes(adjacentNodePointers);
-	//}
-
-	if (parent != NULL) {
-
 	}
 }
 

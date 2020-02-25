@@ -35,10 +35,6 @@ class Node {
 		// destructor
 		~Node();
 
-		// overloaded operators
-		bool operator==(Node node);
-		void operator=(Node node);
-
 		// main functions
 		Node* insert(int key, Node* pointer);
 		Node* insert(int key, string value);
@@ -53,9 +49,11 @@ class Node {
 		void removePointer(Node* pointer);
 		void swapKey(int oldKey, int newKey);
 		Node* getLeftMostNode(int level);
+		Node* getLeftMostNode();
 		vector<Node*> getRow();
 		bool checkNodeSize();
-		void fixAdjacentNodePointers(Node* node);
+		void adjacentNodesFix();
+		Node* fixEndNode(int level);
 
 		// getters
 		Node* getParent();

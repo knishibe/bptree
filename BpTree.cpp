@@ -12,7 +12,7 @@ BpTree::BpTree(unsigned nodeSize) {
 BpTree::BpTree(BpTree* tree) {
 
 	root = new Node(tree->getRoot(), NULL);
-	//fixAdjacentNodePointers(root);
+	root->adjacentNodesFix();
 	height = tree->getHeight();
 
 }
@@ -22,9 +22,11 @@ BpTree::~BpTree() {
 }
 
 BpTree BpTree::operator=(BpTree tree) {
-	BpTree* newTree = new BpTree(tree);
 	delete this;
-	return newTree;
+	root = new Node(tree.getRoot(), NULL);
+	root->adjacentNodesFix();
+	height = tree.getHeight();
+	return *this;
 }
 
 bool BpTree::insert(int key, string value) {
@@ -82,8 +84,4 @@ int BpTree::getHeight() {
 
 Node* BpTree::getRoot() {
 	return root;
-}
-
-void BpTree::fixAdjacentNodePointers(Node* root) {
-	root->fixAdjacentNodePointers(root);
 }

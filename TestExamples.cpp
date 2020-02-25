@@ -16,9 +16,19 @@ int main() {
 	BpTree* tree = new BpTree(3);	
 
 	testInsertSlides(tree);
-	testRemoveSlides(tree);
+	cout << "\n";
+	BpTree* tree3 = new BpTree(tree);
+	cout << "made with copy constructor:\n";
+	tree3->printKeys();
 
+	testRemoveSlides(tree);
+	cout << "\n";
 	BpTree* tree2 = new BpTree(tree);
+	cout << "made with copy constructor:\n";
+	tree2->printKeys();
+
+	*tree2 = *tree3;
+	cout << "made with assignmentOperator:\n\n";
 	tree2->printKeys();
 
 

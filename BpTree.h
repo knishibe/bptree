@@ -12,9 +12,6 @@ class BpTree {
 		
 		Node* root;
 		int height;
-
-		// helper function for copy constructor
-		void fixAdjacentNodePointers(Node* root);
 	
 	public:
 
