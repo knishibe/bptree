@@ -30,14 +30,14 @@ class Node {
 
 		// constructors
 		Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf);
-		Node(Node* node);
+		Node(Node* node, Node* parent);
 
 		// destructor
 		~Node();
 
 		// overloaded operators
 		bool operator==(Node node);
-		void operator=(Node* node);
+	/*	void operator=(Node node);*/
 
 		// main functions
 		Node* insert(int key, Node* pointer);

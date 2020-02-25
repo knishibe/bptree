@@ -12,14 +12,60 @@ Node::Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf) {
 	this->adjacentNodes.rightNode = right;
 }
 
-Node::Node(Node* node) {
-	this->parent = node->getParent();
+Node::Node(Node* node, Node* parent) {
+	vector<Node*> nodePointers = node->getPointers();
+	AdjacentNodes nodes;
+	Node* tempNodes;
+
+	this->parent = parent;
 	this->isLeafNode = node->getIsLeafNode();
 	this->nodeSize = node->getNodeSize();
-	this->pointers = node->getPointers();
 	this->values = node->getValues();
-	this->adjacentNodes.rightNode = node->getAdjacentNodes().rightNode;
-	this->adjacentNodes.leftNode = node->getAdjacentNodes().leftNode;
+	this->elements = node->getElements();
+
+	if (nodePointers.size() > 0) {
+		for (unsigned i = 0; i < nodePointers.size(); i++) {
+			pointers.push_back(new Node(nodePointers[i], this));
+		}
+
+			if (pointers.size() > 1) {
+				if (adjacentNodes.leftNode != NULL) {
+					nodePointers = adjacentNodes.leftNode->getPointers();
+					if (nodePointers.size() > 0) {
+						nodes.leftNode = nodePointers.back();
+					}
+				} else {
+					nodes.leftNode = NULL;
+				} 
+				nodes.rightNode = pointers[1];
+				pointers[0]->setAdjacentNodes(nodes);
+			}
+
+			if (pointers.size() > 2) {
+
+				for (unsigned i = 1; i < pointers.size() - 1; i++) {
+					nodes.leftNode = pointers[i - 1];
+					nodes.rightNode = pointers[i + 1];
+					pointers[i]->setAdjacentNodes(nodes);
+				}
+			}
+
+			if (pointers.size() > 1) {
+				nodes.leftNode = pointers[pointers.size() - 1];
+				if (adjacentNodes.rightNode != NULL) {
+					nodePointers = adjacentNodes.rightNode->getPointers();
+					if (nodePointers.size() > 0) {
+						nodes.rightNode = nodePointers.back();
+					}
+				}
+				else {
+					nodes.rightNode = NULL;
+				}
+				pointers[pointers.size() - 1]->setAdjacentNodes(nodes);
+			}
+		
+	}
+
 }
 
 /*---------------------- Destructor ----------------------*/
@@ -39,6 +85,7 @@ bool Node::operator==(Node node) {
 		this->isLeafNode == node.getIsLeafNode() ||
 		this->nodeSize == node.getNodeSize() ||
 		this->values == node.getValues() ||
+		this->elements == node.getElements() ||
 		*(this->adjacentNodes.rightNode) == *(node.getAdjacentNodes().rightNode) ||
 		*(this->adjacentNodes.leftNode) == *(node.getAdjacentNodes().leftNode)) {
 		returnVal = false;
@@ -57,15 +104,17 @@ bool Node::operator==(Node node) {
 	return returnVal;
 }
 
-void Node::operator=(Node* node) {
-	this->parent = node->getParent();
-	this->isLeafNode = node->getIsLeafNode();
-	this->nodeSize = node->getNodeSize();
-	this->pointers = node->getPointers();
-	this->values = node->getValues();
-	this->adjacentNodes.rightNode = node->getAdjacentNodes().rightNode;
-	this->adjacentNodes.leftNode = node->getAdjacentNodes().leftNode;
-}
+//void Node::operator=(Node node) {
+//	*(this->parent) = *(node.getParent());
+//	this->isLeafNode = node.getIsLeafNode();
+//	this->nodeSize = node.getNodeSize();
+//	this->values = node.getValues();
+//	*(this->adjacentNodes.rightNode) = *(node.getAdjacentNodes().rightNode);
+//	*(this->adjacentNodes.leftNode) = *(node.getAdjacentNodes().leftNode);
+//
+//	this->pointers = node.getPointers();
+//
+//}
 
 
 /*---------------------- Main Functions ----------------------*/

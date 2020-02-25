@@ -11,7 +11,7 @@ BpTree::BpTree(unsigned nodeSize) {
 
 BpTree::BpTree(BpTree* tree) {
 
-	root = tree->getRoot();
+	root = new Node(tree->getRoot(), NULL);
 	height = tree->getHeight();
 
 }

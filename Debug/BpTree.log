@@ -1,4 +1,4 @@
-﻿  BpTree.cpp
-  TestExamples.cpp
-  Generating Code...
+﻿  Node.cpp
+C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Node.cpp(18,8): warning C4101: 'tempNodes': unreferenced local variable
+C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Node.cpp(105): warning C4717: 'Node::operator==': recursive on all control paths, function will cause runtime stack overflow
   BpTree.vcxproj -> C:\Users\kirac\Documents\School\Year 4\Spring 2020\CMPT 454\BpTree\BpTree\bptree\Debug\BpTree.exe

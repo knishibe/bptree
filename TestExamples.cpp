@@ -14,11 +14,14 @@ void testRemoveSlides(BpTree* tree);
 int main() {
 
 	BpTree* tree = new BpTree(3);
-	BpTree* tree2 = new BpTree(tree);
+	
 
 	testInsertSlides(tree);
 	cout << "\n\n";
 	testRemoveSlides(tree);
+	BpTree* tree2 = new BpTree(tree);
+	cout << "\n";
+	tree2->printKeys();
 
 	cout << "\n\n\n" << (tree == tree2) << "\n\n\n";
 
