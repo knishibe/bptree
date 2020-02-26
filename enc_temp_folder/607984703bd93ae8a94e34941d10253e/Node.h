@@ -49,13 +49,11 @@ class Node {
 		void removePointer(Node* pointer);
 		void swapKey(int oldKey, int newKey);
 		Node* getLeftMostNode(int level);
-		/*Node* getLeftMostNode();*/
-		Node* getRightMostNode(int level);
+		Node* getLeftMostNode();
 		vector<Node*> getRow();
 		bool checkNodeSize();
 		void adjacentNodesFix();
-		Node* fixEndNodeRight(int level);
-		Node* fixEndNodeLeft(int level);
+		Node* fixEndNode(int level, Node* left);
 
 		// getters
 		Node* getParent();

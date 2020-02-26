@@ -26,6 +26,10 @@ int main() {
 	testRemoveSlides(tree);
 
 	cout << "\n";
+	cout << "coppied tree after removal:\n";
+	testRemoveSlides(tree3);
+
+	cout << "\n";
 	BpTree* tree2 = new BpTree(tree);
 	cout << "made with copy constructor:\n";
 	tree2->printKeys();
@@ -34,6 +38,10 @@ int main() {
 	*tree2 = *tree3;
 	cout << "made with assignment operator:\n";
 	tree2->printKeys();
+
+	cout << "\n";
+	cout << "assigned tree after removal:\n";
+	testRemoveSlides(tree2);
 
 	delete tree;
 	delete tree2;
@@ -80,10 +88,16 @@ void testInsertSlides(BpTree* tree) {
 void testRemoveSlides(BpTree* tree) {
 
 	tree->remove(9);
+	tree->printKeys();
 	tree->remove(6);
+	tree->printKeys();
 	tree->remove(8);
+	tree->printKeys();
 	tree->remove(23);
+	tree->printKeys();
+
 	tree->remove(31);
+	tree->printKeys();
 	tree->remove(27);
 
 	cout << "Tree after remove:\n";

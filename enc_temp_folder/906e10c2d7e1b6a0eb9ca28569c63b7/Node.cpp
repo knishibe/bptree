@@ -54,35 +54,20 @@ void Node::adjacentNodesFix() {
 	}
 
 	if (adjacentNodes.rightNode == NULL) {
-		adjacentNodes.rightNode = fixEndNodeRight(0);
-	}
-	if (adjacentNodes.leftNode == NULL) {
-		adjacentNodes.leftNode = fixEndNodeLeft(0);
+		adjacentNodes.rightNode = fixEndNode(0, this);
 	}
 }
 
-Node* Node::fixEndNodeRight(int level) {
+Node* Node::fixEndNode(int level, Node* left) {
 	if ((parent != NULL) && (adjacentNodes.rightNode == NULL)) {
 		if (parent->adjacentNodes.rightNode != NULL) {
-			return parent->adjacentNodes.rightNode->getLeftMostNode(level + 1);
+			Node* leftNode = parent->adjacentNodes.rightNode->getLeftMostNode(level + 1);
+			leftNode->adjacentNodes.leftNode = left;
+			return leftNode;
 		} else {
-			return parent->fixEndNodeRight(level + 1);
+			return parent->fixEndNode(level + 1, left);
 		}
 	} else {
-		return NULL;
-	}
-}
-
-Node* Node::fixEndNodeLeft(int level) {
-	if ((parent != NULL) && (adjacentNodes.leftNode == NULL)) {
-		if (parent->adjacentNodes.leftNode != NULL) {
-			return parent->adjacentNodes.leftNode->getRightMostNode(level + 1);
-		}
-		else {
-			return parent->fixEndNodeRight(level + 1);
-		}
-	}
-	else {
 		return NULL;
 	}
 }
@@ -515,15 +500,6 @@ Node* Node::getLeftMostNode(int level) {
 		return this;
 	} else {
 		return pointers[0]->getLeftMostNode(level - 1);
-	}
-}
-
-Node* Node::getRightMostNode(int level) {
-	if (level == 0) {
-		return this;
-	}
-	else {
-		return pointers[pointers.size() - 1]->getRightMostNode(level - 1);
 	}
 }
 
