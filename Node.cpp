@@ -56,6 +56,7 @@ void Node::adjacentNodesFix() {
 	if (adjacentNodes.rightNode == NULL) {
 		adjacentNodes.rightNode = fixEndNodeRight(0);
 	}
+
 	if (adjacentNodes.leftNode == NULL) {
 		adjacentNodes.leftNode = fixEndNodeLeft(0);
 	}
@@ -79,7 +80,7 @@ Node* Node::fixEndNodeLeft(int level) {
 			return parent->adjacentNodes.leftNode->getRightMostNode(level + 1);
 		}
 		else {
-			return parent->fixEndNodeRight(level + 1);
+			return parent->fixEndNodeLeft(level + 1);
 		}
 	}
 	else {
@@ -527,14 +528,14 @@ Node* Node::getRightMostNode(int level) {
 	}
 }
 
-Node* Node::getLeftMostNode() {
-	if (isLeafNode) {
-		return this;
-	}
-	else {
-		return pointers[0]->getLeftMostNode();
-	}
-}
+//Node* Node::getLeftMostNode() {
+//	if (isLeafNode) {
+//		return this;
+//	}
+//	else {
+//		return pointers[0]->getLeftMostNode();
+//	}
+//}
 
 vector<Node*> Node::getRow() {
 

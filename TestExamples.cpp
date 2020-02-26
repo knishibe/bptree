@@ -19,33 +19,35 @@ int main() {
 
 	cout << "\n";
 	BpTree* tree3 = new BpTree(tree);
-	cout << "made with copy constructor:\n";
+	BpTree* tree4 = new BpTree(tree);
+	cout << "Made with copy constructor:\n";
 	tree3->printKeys();
 	
 	cout << "\n";
 	testRemoveSlides(tree);
 
 	cout << "\n";
-	cout << "coppied tree after removal:\n";
+	cout << "Coppied ";
 	testRemoveSlides(tree3);
 
 	cout << "\n";
 	BpTree* tree2 = new BpTree(tree);
-	cout << "made with copy constructor:\n";
+	cout << "Made with copy constructor:\n";
 	tree2->printKeys();
 
 	cout << "\n";
-	*tree2 = *tree3;
-	cout << "made with assignment operator:\n";
+	*tree2 = *tree4;
+	cout << "Made with assignment operator:\n";
 	tree2->printKeys();
 
 	cout << "\n";
-	cout << "assigned tree after removal:\n";
+	cout << "Assigned ";
 	testRemoveSlides(tree2);
 
 	delete tree;
 	delete tree2;
 	delete tree3;
+	delete tree4;
 
 	_CrtDumpMemoryLeaks();
 	return 0;
@@ -88,16 +90,10 @@ void testInsertSlides(BpTree* tree) {
 void testRemoveSlides(BpTree* tree) {
 
 	tree->remove(9);
-	tree->printKeys();
 	tree->remove(6);
-	tree->printKeys();
 	tree->remove(8);
-	tree->printKeys();
 	tree->remove(23);
-	tree->printKeys();
-
-	tree->remove(31);
-	tree->printKeys();
+	tree->remove(31);	
 	tree->remove(27);
 
 	cout << "Tree after remove:\n";
