@@ -16,22 +16,30 @@ int main() {
 	BpTree* tree = new BpTree(3);	
 
 	testInsertSlides(tree);
+
 	cout << "\n";
 	BpTree* tree3 = new BpTree(tree);
 	cout << "made with copy constructor:\n";
 	tree3->printKeys();
-
+	
+	cout << "\n";
 	testRemoveSlides(tree);
+
 	cout << "\n";
 	BpTree* tree2 = new BpTree(tree);
 	cout << "made with copy constructor:\n";
 	tree2->printKeys();
 
+	cout << "\n";
 	*tree2 = *tree3;
-	cout << "made with assignmentOperator:\n\n";
+	cout << "made with assignment operator:\n";
 	tree2->printKeys();
 
+	delete tree;
+	delete tree2;
+	delete tree3;
 
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

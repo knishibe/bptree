@@ -23,7 +23,7 @@ class BpTree {
 		~BpTree();
 
 		// overloaded operators
-		BpTree operator=(BpTree tree);
+		BpTree & operator=(BpTree &tree);
 
 		// main functions
 		bool insert(int key, string value);

@@ -21,11 +21,13 @@ BpTree::~BpTree() {
 	delete root;
 }
 
-BpTree BpTree::operator=(BpTree tree) {
-	delete this;
-	root = new Node(tree.getRoot(), NULL);
-	root->adjacentNodesFix();
-	height = tree.getHeight();
+BpTree & BpTree::operator=(BpTree &tree) {
+	//delete root;
+	//root = new Node(tree.getRoot(), NULL);
+	//root->adjacentNodesFix();
+	//height = tree.getHeight();
+	swap(root, tree.root);
+	swap(height, tree.height);
 	return *this;
 }
 

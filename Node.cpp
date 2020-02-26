@@ -15,8 +15,6 @@ Node::Node(int nodeSize, Node* parent, Node* left, Node* right, bool isLeaf) {
 Node::Node(Node* node, Node* parent) {
 	vector<Node*> nodePointers = node->getPointers();
 	vector<Node*> parentPointers;
-	AdjacentNodes nodes;
-	Node* tempNodes;
 
 	this->parent = parent;
 	this->isLeafNode = node->getIsLeafNode();
@@ -75,7 +73,7 @@ Node* Node::fixEndNode(int level) {
 /*---------------------- Destructor ----------------------*/
 
 Node::~Node() {
-	for (unsigned i = 0; i < (int)pointers.size(); i++) {
+	for (unsigned i = 0; i < pointers.size(); i++) {
 		delete pointers[i];
 	}
 }
